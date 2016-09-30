@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>朋友圈挂灯笼猜灯谜</title>
+    <link rel="stylesheet" href="./src/css/index.css">
+    <script src="./src/data/data.js"></script>
+    <script src="./src/js/canvas2image.js"></script>
+    <script src="./src/js/index.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script>
+        //初始化方法
+        var initDM = function(){
+            getDM();
+            $("changeDM").addEventListener("click", function(e){
+                getDM();
+            });
+            Ajax('POST', './jstoken.php', {url: encodeURIComponent(window.location.href)}, function(data){
+		        if(typeof data === "string"){
+                    data = JSON.parse(data);
+                } 
+	            data.debug = false;
+                data.jsApiList = ["onMenuShareAppMessage", "onMenuShareTimeline"];
+                wx.config(data);
+                wx.ready(function(){
+                    //分享到朋友圈
+                    wx.onMenuShareTimeline({
+                        title: '中秋猜灯谜', // 分享标题
+                        link: 'http://zq.linghit.com/index.html', // 分享链接
+                        imgUrl: 'http://zq.linghit.com/src/img/icon-share.jpg', // 分享图标
+                        success: function () {
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () {
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+
+                    //分享给好友
+                    wx.onMenuShareAppMessage({
+                        title: '中秋猜灯谜', // 分享标题
+                        desc: '中秋节，挂灯笼，猜灯谜，叙叙旧', // 分享描述
+                        link: 'http://zq.linghit.com/index.html', // 分享链接
+                        imgUrl: 'http://zq.linghit.com/src/img/icon-share.jpg', // 分享图标
+                        success: function () {
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () {
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+                });
+            }, function(error){
+		        console.log(error);
+            });
+        };
+    </script>
+</head>
+<body onload="initDM()">
+    <div class="container">
+        <div class="content" id="content">
+            <div class="avatar">
+                <img src="./src/img/avatar.jpg" alt="dufu">
+            </div>
+            <div class="r-panel">
+                <div class="u-name">李白</div>
+                <section class="msg-text">
+                    <p>重要的事情说三遍！</p>
+                    <p>长按保存图片，并发图到朋友圈！</p>
+                    <p>长按保存图片，并发图到朋友圈！</p>
+                    <p>长按保存图片，并发图到朋友圈！</p>
+                </section>
+                <section class="lantern" id="lantern">
+                    <canvas class="canvas-lt" id="canvas_lt">
+                    </canvas>
+                </section>
+                <div class="clearfix">
+                    <button class="say-sth"></button>
+                </div>
+                <section class="friends-say">
+                    <div class="favour-bar">
+                        <img class="icon-fav-before" src="./src/img/icon-heart.jpg" alt="heart-pic">
+                        <p>李白、杜甫、王维、白居易、李世民等108位觉得很赞。</p>
+                    </div>
+                    <div class="friends-msg">
+                        <p>杜甫：<span class="msg-text">猜不到~~~</span></p>
+                        <p>李白：<span class="msg-text">谜底就是：“<span id="dm_content"></span>”</span></p>
+                    </div>
+                </section>
+            </div>
+
+            <footer class="flex">
+                <div class="f-left">
+                    <p>朕不喜欢>></p>
+                    <div class="b-line"></div>
+                </div>
+                <div class="f-center">
+                    <img class="icon-fav-before" src="./src/img/btn_2.jpg" alt="btn">
+                </div>
+                <div class="f-right">
+                    <button class="btn" id="changeDM">换个</button>
+                </div>
+            </footer>
+        </div>
+    </div>
+</body>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?57d773d96a745191ee911d5cfc54338b";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+</html>

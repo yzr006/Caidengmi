@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <title>朋友圈挂灯笼猜灯谜</title>
+    <link rel="stylesheet" href="./src/css/index.css">
+    <script src="./src/data/data.js"></script>
+    <script src="./src/js/canvas2image.js"></script>
+    <script src="./src/js/index.js"></script>
+    <script src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script>
+    <script>
+        var init = function(){
+            getDM();
+            $("createDM").addEventListener("click", function(e){
+                //console.log(this.innerText);
+                window.location = "myDm.html";
+            });
+            Ajax('POST', './jstoken.php', {url: encodeURIComponent(window.location.href)}, function(data){
+                if(typeof data === "string"){
+                    data = JSON.parse(data);
+                }
+                data.debug = false;
+                data.jsApiList = ["onMenuShareAppMessage", "onMenuShareTimeline"];
+                wx.config(data);
+                wx.ready(function(){
+                    //分享到朋友圈
+                    wx.onMenuShareTimeline({
+                        title: '中秋猜灯谜', // 分享标题
+                        link: 'http://zq.linghit.com/index.html', // 分享链接
+                        imgUrl: 'http://zq.linghit.com/src/img/icon-share.jpg', // 分享图标
+                        success: function () {
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () {
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+
+                    //分享给好友
+                    wx.onMenuShareAppMessage({
+                        title: '中秋猜灯谜', // 分享标题
+                        desc: '中秋节，挂灯笼，猜灯谜，叙叙旧', // 分享描述
+                        link: 'http://zq.linghit.com/index.html', // 分享链接
+                        imgUrl: 'http://zq.linghit.com/src/img/icon-share.jpg', // 分享图标
+                        success: function () {
+                            // 用户确认分享后执行的回调函数
+                        },
+                        cancel: function () {
+                            // 用户取消分享后执行的回调函数
+                        }
+                    });
+                });
+            }, function(error){
+                console.log(error);
+            });
+        };
+    </script>
+</head>
+<body onload="init()">
+    <div class="container">
+        <div class="content" id="content">
+            <div class="avatar">
+                <img src="./src/img/avatar.jpg" alt="dufu">
+            </div>
+            <div class="r-panel">
+                <div class="u-name">李白</div>
+                <section class="msg-text">
+                    <p>中秋节，挂灯笼，猜灯谜！</p>
+                    <p>朋友圈，送祝福，叙叙旧！</p>
+                </section>
+                <section class="lantern" id="lantern">
+                    <canvas class="canvas-lt" id="canvas_lt">
+                    </canvas>
+                </section>
+                <div class="clearfix" style="line-height: .27rem; margin-top: .2rem;">
+                    <p># 在页面下方生成你的灯谜 #<button class="say-sth" style="margin: 0;"></button></p>
+
+                </div>
+            </div>
+
+            <!--<img id="img_lt" src="./src/img/lantern.png">-->
+            <!--<section class="lantern">
+                <div class="lantern-box">
+                    <p class="dm-title"><span id="dm_title"></span><br>（打一 <span id="dm_type"></span>）</p>
+                </div>
+            </section>-->
+            <!--<section class="btn-box">
+                <button class="btn" >换一个</button>
+            </section>-->
+            <footer class="flex">
+                <div class="f-left">
+                    <p>一键生成灯谜>></p>
+                    <div class="b-line"></div>
+                </div>
+                <div class="f-center">
+                    <img class="icon-fav-before" src="./src/img/btn_3.jpg" alt="btn">
+                </div>
+                <div class="f-right">
+                    <button class="btn" id="createDM">生成</button>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+</body>
+<script>
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?57d773d96a745191ee911d5cfc54338b";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+</script>
+</html>
